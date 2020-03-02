@@ -40,13 +40,17 @@ expressServer.get("/shibi/flixbus.shibi", async function (req, res, next) {
 
     let data = await shibiSearch.shibiFlixbusSearch(nameFrom, nameTo, new Date(date));
 
-    if (data == null) res.send("Request failed.");
+    if (data == null) {
+        res.send("Request failed.");
+    } else {
+        let finishedData: Shibi = shibiCreator.createShibiFromFlixbus(data);
 
-    let finishedData: Shibi = shibiCreator.createShibiFromFlixbus(data);
-
-    if (finishedData == null) res.send("Shibi parsing failed.");
-
-    res.send(finishedData);
+        if (finishedData == null) {
+            res.send("Shibi parsing failed.");
+        } else {
+            res.send(finishedData);
+        }
+    }
 });
 
 
