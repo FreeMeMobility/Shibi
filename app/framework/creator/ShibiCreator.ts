@@ -8,6 +8,9 @@ import Departure from "../../model/shibi/Departure";
 import Trip, {TripType} from "../../model/shibi/Trip";
 import {ThePublicTransport} from "../../model/thepublictransport/ThePublicTransport";
 import {TPTTrip} from "../../model/thepublictransport/TPTTrip";
+import {MiFazData} from "../../model/mifaz/MiFazData";
+import {Entry} from "../../model/mifaz/Entry";
+import DateTools from "../date/DateTools";
 
 export default class ShibiCreator {
 
@@ -44,7 +47,10 @@ export default class ShibiCreator {
                             leg.mode
                         ],
                         barrier_free: false,
-                        available: leg.public
+                        available: leg.public,
+                        hasTimeDetails: false,
+                        timeDetailsDeparture: null,
+                        timeDetailsArrival: null
                     };
                     let shibiTo: Place = {
                         location: null,
@@ -55,15 +61,20 @@ export default class ShibiCreator {
                             leg.mode
                         ],
                         barrier_free: false,
-                        available: leg.public
+                        available: leg.public,
+                        hasTimeDetails: false,
+                        timeDetailsDeparture: null,
+                        timeDetailsArrival: null
                     };
                     let shibiDeparture: Departure = {
                         time: leg.departure,
-                        predictedTime: leg.departure
+                        predictedTime: leg.departure,
+                        noPreciseTime: false
                     };
                     let shibiArrival: Departure = {
                         time: leg.arrival,
-                        predictedTime: leg.arrival
+                        predictedTime: leg.arrival,
+                        noPreciseTime: false
                     };
 
                     shibiSubTrips.push({
@@ -105,7 +116,7 @@ export default class ShibiCreator {
         }
     }
 
-    public createShibiFromTPT(tpt: ThePublicTransport): Shibi {
+    public createShibiFromTPT(tpt: ThePublicTransport, source: string): Shibi {
         try {
             let shibiTrips: Trip[] = [];
             tpt.trips.forEach(function (trip: TPTTrip) {
@@ -133,7 +144,10 @@ export default class ShibiCreator {
                         id: leg.departure.id,
                         information: [],
                         barrier_free: true,
-                        available: leg.departure.identified
+                        available: leg.departure.identified,
+                        hasTimeDetails: false,
+                        timeDetailsDeparture: null,
+                        timeDetailsArrival: null
                     };
                     let shibiTo: Place = {
                         location: {
@@ -145,15 +159,20 @@ export default class ShibiCreator {
                         id: leg.arrival.id,
                         information: [],
                         barrier_free: true,
-                        available: leg.arrival.identified
+                        available: leg.arrival.identified,
+                        hasTimeDetails: false,
+                        timeDetailsDeparture: null,
+                        timeDetailsArrival: null
                     };
                     let shibiDeparture: Departure = {
                         time: new Date(leg.departureTime),
-                        predictedTime: new Date(leg.departureTime + leg.departureDelay)
+                        predictedTime: new Date(leg.departureTime + leg.departureDelay),
+                        noPreciseTime: false
                     };
                     let shibiArrival: Departure = {
                         time: new Date(leg.arrivalTime),
-                        predictedTime: new Date(leg.arrivalTime + leg.arrivalDelay)
+                        predictedTime: new Date(leg.arrivalTime + leg.arrivalDelay),
+                        noPreciseTime: false
                     };
 
                     let shibiStops: Place[] = [];
@@ -169,7 +188,18 @@ export default class ShibiCreator {
                                 id: stop.location.id,
                                 information: [],
                                 barrier_free: true,
-                                available: stop.location.identified
+                                available: stop.location.identified,
+                                hasTimeDetails: true,
+                                timeDetailsDeparture: {
+                                    time: new Date(stop.departureTime),
+                                    predictedTime: new Date(stop.departureTime + stop.departureDelay),
+                                    noPreciseTime: false
+                                },
+                                timeDetailsArrival: {
+                                    time: new Date(stop.arrivalTime),
+                                    predictedTime: new Date(stop.arrivalTime + stop.arrivalDelay),
+                                    noPreciseTime: false
+                                },
                             });
                         });
                     }
@@ -182,7 +212,7 @@ export default class ShibiCreator {
                         arrival: shibiArrival,
                         vehicle: shibiVehicle,
                         information: leg.message,
-                        source: "ThePublicTransport",
+                        source: source,
                         url: undefined
                     });
                 });
@@ -201,6 +231,110 @@ export default class ShibiCreator {
 
             return {
                 context: tpt.context.laterContext,
+                serverResponseTime: Date.now(),
+                from: shibiTrips[0].from,
+                to: shibiTrips[shibiTrips.length - 1].to,
+                trips: shibiTrips
+            }
+        } catch (e) {
+            return null;
+        }
+    }
+
+    public createShibiFromMiFaz(mifaz: MiFazData, date: Date): Shibi {
+        let miFazDate = DateTools.getMiFazDate(date);
+
+        console.log(date);
+        console.log(DateTools.getMiFazDate(date));
+
+        try {
+            let shibiTrips: Trip[] = [];
+
+            mifaz.entries.forEach(function (entry: Entry) {
+                let shibiSubTrips: SubTrip[] = [];
+
+                let shibiVehicle: Vehicle = {
+                    operator: entry.username,
+                    id: entry.id,
+                    name: "MiFaz Trip",
+                    vehicleType: VehicleType.RIDESHARING,
+                    climateFootprint: VehicleClimateFootprint.MEDIUM,
+                    speed: VehicleSpeed.FAST,
+                    features: [],
+                    barrier_free: false,
+                    seats: null
+                };
+
+                let shibiFrom: Place = {
+                    location: {
+                        latitude: Number(entry.startcoord.split(" ")[0]),
+                        longitude: Number(entry.startcoord.split(" ")[1]),
+                        altitude: null
+                    },
+                    placeType: PlaceType.ADDRESS,
+                    name: entry.startloc,
+                    id: entry.startID,
+                    information: [],
+                    barrier_free: false,
+                    available: true,
+                    hasTimeDetails: false,
+                    timeDetailsDeparture: null,
+                    timeDetailsArrival: null
+                };
+                let shibiTo: Place = {
+                    location: {
+                        latitude: Number(entry.goalcoord.split(" ")[0]),
+                        longitude: Number(entry.goalcoord.split(" ")[1]),
+                        altitude: null
+                    },
+                    placeType: PlaceType.ADDRESS,
+                    name: entry.goalloc,
+                    id: entry.goalID,
+                    information: [
+                    ],
+                    barrier_free: false,
+                    available: true,
+                    hasTimeDetails: false,
+                    timeDetailsDeparture: null,
+                    timeDetailsArrival: null
+                };
+                let shibiDeparture: Departure = {
+                    time: DateTools.miFazToDate(miFazDate, entry.starttimebegin),
+                    predictedTime: DateTools.miFazToDate(miFazDate, entry.starttimebegin),
+                    noPreciseTime: false
+                };
+                let shibiArrival: Departure = {
+                    time: DateTools.miFazToDate(miFazDate, entry.starttimeend),
+                    predictedTime: DateTools.miFazToDate(miFazDate, entry.starttimeend),
+                    noPreciseTime: true
+                };
+
+                shibiSubTrips.push({
+                    from: shibiFrom,
+                    to: shibiTo,
+                    stops: null,
+                    departure: shibiDeparture,
+                    arrival: shibiArrival,
+                    vehicle: shibiVehicle,
+                    information: null,
+                    source: "MiFaz",
+                    url: entry.url
+                });
+
+                shibiTrips.push({
+                    from: shibiSubTrips[0].from,
+                    to: shibiSubTrips[shibiSubTrips.length - 1].to,
+                    departure: shibiSubTrips[0].departure,
+                    arrival: shibiSubTrips[shibiSubTrips.length - 1].arrival,
+                    routes: shibiSubTrips,
+                    tripType: TripType.SINGLE_MODAL,
+                    alternative: false,
+                    information: []
+                })
+            });
+
+            return {
+                context: null,
                 serverResponseTime: Date.now(),
                 from: shibiTrips[0].from,
                 to: shibiTrips[shibiTrips.length - 1].to,

@@ -20,8 +20,8 @@ export interface Stop {
     arrivalTimePredicted:       boolean;
     arrivalPosition:            null;
     arrivalPositionPredicted:   boolean;
-    departureDelay:             null;
-    arrivalDelay:               null;
+    departureDelay:             number | null;
+    arrivalDelay:               number | null;
     maxTime:                    number | null;
     minTime:                    number | null;
 }

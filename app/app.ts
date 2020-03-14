@@ -11,7 +11,7 @@ const shibiSearch: ShibiSearch = new ShibiSearch();
 // Define Port
 const PORT = process.env.PORT || '8174';
 
-expressServer.get("/shibi/tpt.shibi", async function (req, res, next) {
+expressServer.get("/shibi/deutschebahn.shibi", async function (req, res, next) {
     let latitudeFrom    = req.query['latFrom'];
     let longitudeFrom   = req.query['lonFrom'];
     let latitudeTo      = req.query['latTo'];
@@ -20,15 +20,91 @@ expressServer.get("/shibi/tpt.shibi", async function (req, res, next) {
 
     if (date == undefined) date = new Date(Date.now());
 
-    let data = await shibiSearch.shibiTPTSearch(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, new Date(date));
+    let data = await shibiSearch.shibiTPTSearch(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, new Date(date), "DB");
 
-    if (data == null) res.send("Request failed.");
+    if (data == null) {
+        res.send("Request failed.");
+    } else {
+        let finishedData: Shibi = shibiCreator.createShibiFromTPT(data, "Deutsche Bahn (DB Navigator)");
 
-    let finishedData: Shibi = shibiCreator.createShibiFromTPT(data);
+        if (finishedData == null) {
+            res.send("Shibi parsing failed.");
+        } else {
+            res.send(finishedData);
+        }
+    }
+});
 
-    if (finishedData == null) res.send("Shibi parsing failed.");
+expressServer.get("/shibi/rmv.shibi", async function (req, res, next) {
+    let latitudeFrom    = req.query['latFrom'];
+    let longitudeFrom   = req.query['lonFrom'];
+    let latitudeTo      = req.query['latTo'];
+    let longitudeTo     = req.query['lonTo'];
+    let date            = req.query['date'];
 
-    res.send(finishedData);
+    if (date == undefined) date = new Date(Date.now());
+
+    let data = await shibiSearch.shibiTPTSearch(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, new Date(date), "NVV_RMV");
+
+    if (data == null) {
+        res.send("Request failed.");
+    } else {
+        let finishedData: Shibi = shibiCreator.createShibiFromTPT(data, "Rhein-Main Verkehrsbund");
+
+        if (finishedData == null) {
+            res.send("Shibi parsing failed.");
+        } else {
+            res.send(finishedData);
+        }
+    }
+});
+
+expressServer.get("/shibi/bvg.shibi", async function (req, res, next) {
+    let latitudeFrom    = req.query['latFrom'];
+    let longitudeFrom   = req.query['lonFrom'];
+    let latitudeTo      = req.query['latTo'];
+    let longitudeTo     = req.query['lonTo'];
+    let date            = req.query['date'];
+
+    if (date == undefined) date = new Date(Date.now());
+
+    let data = await shibiSearch.shibiTPTSearch(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, new Date(date), "BVG");
+
+    if (data == null) {
+        res.send("Request failed.");
+    } else {
+        let finishedData: Shibi = shibiCreator.createShibiFromTPT(data, "Berliner Verkehrsgesellschaft");
+
+        if (finishedData == null) {
+            res.send("Shibi parsing failed.");
+        } else {
+            res.send(finishedData);
+        }
+    }
+});
+
+expressServer.get("/shibi/oebb.shibi", async function (req, res, next) {
+    let latitudeFrom    = req.query['latFrom'];
+    let longitudeFrom   = req.query['lonFrom'];
+    let latitudeTo      = req.query['latTo'];
+    let longitudeTo     = req.query['lonTo'];
+    let date            = req.query['date'];
+
+    if (date == undefined) date = new Date(Date.now());
+
+    let data = await shibiSearch.shibiTPTSearch(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, new Date(date), "OEBB");
+
+    if (data == null) {
+        res.send("Request failed.");
+    } else {
+        let finishedData: Shibi = shibiCreator.createShibiFromTPT(data, "Österreichische Bundesbahn");
+
+        if (finishedData == null) {
+            res.send("Shibi parsing failed.");
+        } else {
+            res.send(finishedData);
+        }
+    }
 });
 
 expressServer.get("/shibi/flixbus.shibi", async function (req, res, next) {
@@ -48,6 +124,30 @@ expressServer.get("/shibi/flixbus.shibi", async function (req, res, next) {
         if (finishedData == null) {
             res.send("Shibi parsing failed.");
         } else {
+            res.send(finishedData);
+        }
+    }
+});
+
+expressServer.get("/shibi/mifaz.shibi", async function (req, res, next) {
+    let latitudeFrom    = req.query['latFrom'];
+    let longitudeFrom   = req.query['lonFrom'];
+    let latitudeTo      = req.query['latTo'];
+    let longitudeTo     = req.query['lonTo'];
+    let date            = req.query['date'];
+
+    if (date == undefined) date = new Date(Date.now());
+
+    let data = await shibiSearch.shibiMiFazSearch(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, new Date(date));
+
+    if (data == null) res.send("Request failed.");
+
+    else {
+        let finishedData: Shibi = shibiCreator.createShibiFromMiFaz(data, new Date(date));
+
+        if (finishedData == null) res.send("Shibi parsing failed.");
+
+        else {
             res.send(finishedData);
         }
     }

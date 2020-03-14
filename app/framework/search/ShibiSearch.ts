@@ -3,9 +3,11 @@ import {TPTSearch} from "../../model/thepublictransport/search/TPTSearch";
 import {ThePublicTransport} from "../../model/thepublictransport/ThePublicTransport";
 import {Flixbus} from "../../model/flixbus/Flixbus";
 import {FlixbusSearch, Message} from "../../model/flixbus/search/FlixbusSearch";
+import {MiFazData} from "../../model/mifaz/MiFazData";
+import DateTools from "../date/DateTools";
 
 export default class ShibiSearch {
-    public async shibiTPTSearch(lat: number, lon: number, latTo: number, lonTo: number, date: Date): Promise<ThePublicTransport> {
+    public async shibiTPTSearch(lat: number, lon: number, latTo: number, lonTo: number, date: Date, source: string): Promise<ThePublicTransport> {
         let SEARCH: string = "https://api.thepublictransport.de/location/nearby?lat="
             + lat.toString() + "&lon=" + lon.toString()
             + "&types=STATION&maxLocations=1&source=DB";
@@ -26,8 +28,8 @@ export default class ShibiSearch {
         let request =  await axios.get("https://api.thepublictransport.de/trips/id?from="
             + FROM.locations[0].id
             + "&to=" + TO.locations[0].id
-            + "&when=" + this.getTPTDate(date)
-            + "&accessibility=NEUTRAL&optimization=LEAST_DURATION&walkspeed=NORMAL&source=DB");
+            + "&when=" + DateTools.getTPTDate(date)
+            + "&accessibility=NEUTRAL&optimization=LEAST_DURATION&walkspeed=NORMAL&source=" + source);
 
         return request.data as ThePublicTransport;
     }
@@ -73,17 +75,21 @@ export default class ShibiSearch {
         return request.data as Flixbus;
     }
 
-    private getTPTDate(date: Date): string {
-        return date.getDay().toString().padStart(2, '0') +
-            "." +
-            date.getMonth().toString().padStart(2, '0') +
-            "." +
-            date.getFullYear().toString().padStart(4, '0') +
-            "T" +
-            date.getHours().toString().padStart(2, '0') +
-            ":" +
-            date.getSeconds().toString().padStart(2, '0') +
-            ":" +
-            "00";
+    public async shibiMiFazSearch(lat: number, lon: number, latTo: number, lonTo: number, date: Date): Promise<MiFazData> {
+        let request = await axios.get("https://api.mifaz.de/request/?f=getEntries" +
+            "&startlatitude=" + lat +
+            "&startlongitude=" + lon +
+            "&goallatitude=" + latTo +
+            "&goallongitude=" + lonTo +
+            "&journeydate=" + DateTools.getMiFazDate(date));
+
+        console.log("https://api.mifaz.de/request/?f=getEntries" +
+            "&startlatitude=" + lat +
+            "&startlongitude=" + lon +
+            "&goallatitude=" + latTo +
+            "&goallongitude=" + lonTo +
+            "&journeydate=" + DateTools.getMiFazDate(date));
+
+        return request.data as MiFazData;
     }
 }
