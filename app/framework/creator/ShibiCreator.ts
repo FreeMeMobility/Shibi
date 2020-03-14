@@ -244,9 +244,6 @@ export default class ShibiCreator {
     public createShibiFromMiFaz(mifaz: MiFazData, date: Date): Shibi {
         let miFazDate = DateTools.getMiFazDate(date);
 
-        console.log(date);
-        console.log(DateTools.getMiFazDate(date));
-
         try {
             let shibiTrips: Trip[] = [];
 

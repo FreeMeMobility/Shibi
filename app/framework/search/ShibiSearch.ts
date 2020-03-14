@@ -83,13 +83,6 @@ export default class ShibiSearch {
             "&goallongitude=" + lonTo +
             "&journeydate=" + DateTools.getMiFazDate(date));
 
-        console.log("https://api.mifaz.de/request/?f=getEntries" +
-            "&startlatitude=" + lat +
-            "&startlongitude=" + lon +
-            "&goallatitude=" + latTo +
-            "&goallongitude=" + lonTo +
-            "&journeydate=" + DateTools.getMiFazDate(date));
-
         return request.data as MiFazData;
     }
 }
