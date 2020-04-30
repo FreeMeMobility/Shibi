@@ -79,7 +79,7 @@ These data are coming from the ÖBB HAFAS endpoint.
 
 These data are coming from the MiFaz API.
 
-## ride2go (Fahrgemeinschaften)
+## ride2go (Ridesharing)
 
 ![logo](https://avatars1.githubusercontent.com/u/63668570?s=200&v=4)
 
@@ -90,4 +90,16 @@ These data are coming from the MiFaz API.
 **Description:**
 
 These data are coming from the ride2go API called r2gapi.
+
+## BlaBlaCar (Ridesharing)
+
+![logo](https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/BlaBlaCar_logo.svg/500px-BlaBlaCar_logo.svg.png)
+
+**Endpoint:**
+
+``blablacar.shibi``
+
+**Description:**
+
+These data are coming from the BlaBlaCar API. Needs an APIKey from BlaBlaCar.
 

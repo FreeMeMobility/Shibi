@@ -16,6 +16,7 @@ import {Flixbus} from "../../model/flixbus/Flixbus";
 import {FlixbusSearch, Message} from "../../model/flixbus/search/FlixbusSearch";
 import {MiFazData} from "../../model/mifaz/MiFazData";
 import DateTools from "../date/DateTools";
+import {BlaBlaCarData} from "../../model/blablacar/BlaBlaCarData";
 
 export default class ShibiSearch {
     public async shibiTPTSearch(lat: number, lon: number, latTo: number, lonTo: number, date: Date, source: string): Promise<ThePublicTransport> {
@@ -95,6 +96,28 @@ export default class ShibiSearch {
             "&journeydate=" + DateTools.getMiFazDate(date));
 
         return request.data as MiFazData;
+    }
+
+    public async shibiBlaBlaCarSearch(
+        lat: number,
+        lon: number,
+        latTo: number,
+        lonTo: number,
+        countryFrom: string,
+        countryTo: string,
+        locale: string,
+        apikey: string,
+        date: Date): Promise<BlaBlaCarData> {
+        let request = await axios.get("https://public-api.blablacar.com/api/v3/trips?key=" + apikey +
+            "&from_coordinate=" + lat + "," + lon +
+            "&from_country=" + countryFrom +
+            "&to_coordinate=" + latTo + "," + lonTo +
+            "&to_country=" + countryTo +
+            "&locale=" + locale +
+            "&currency=EUR" +
+            "&start_date_local=" + date.toISOString());
+
+        return request.data as BlaBlaCarData;
     }
 
     public async shibiRide2GoSearch(lat: number, lon: number, latTo: number, lonTo: number, date: Date): Promise<PageTripDto> {

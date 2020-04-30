@@ -6,11 +6,13 @@ import SubTrip from "../../model/shibi/SubTrip";
 import Place, {PlaceType} from "../../model/shibi/Place";
 import Departure from "../../model/shibi/Departure";
 import Trip, {TripType} from "../../model/shibi/Trip";
+import {BlaTrip} from '../../model/blablacar/BlaTrip';
 import {ThePublicTransport} from "../../model/thepublictransport/ThePublicTransport";
 import {TPTTrip} from "../../model/thepublictransport/TPTTrip";
 import {MiFazData} from "../../model/mifaz/MiFazData";
 import {Entry} from "../../model/mifaz/Entry";
 import DateTools from "../date/DateTools";
+import {BlaBlaCarData} from "../../model/blablacar/BlaBlaCarData";
 
 export default class ShibiCreator {
 
@@ -332,6 +334,112 @@ export default class ShibiCreator {
 
             return {
                 context: null,
+                serverResponseTime: Date.now(),
+                from: shibiTrips[0].from,
+                to: shibiTrips[shibiTrips.length - 1].to,
+                trips: shibiTrips
+            }
+        } catch (e) {
+            return null;
+        }
+    }
+
+    public createShibiFromBlaBlaCar(blaBlaCarData: BlaBlaCarData): Shibi {
+        try {
+            let shibiTrips: Trip[] = [];
+            blaBlaCarData.trips.forEach(function (trip: BlaTrip) {
+                let shibiSubTrips: SubTrip[] = [];
+
+                let shibiVehicle: Vehicle = {
+                    operator: trip.vehicle.model,
+                    id: trip.vehicle.make,
+                    name: trip.vehicle.model,
+                    vehicleType: VehicleType.RIDESHARING,
+                    climateFootprint: VehicleClimateFootprint.MEDIUM,
+                    speed: VehicleSpeed.FAST,
+                    features: [],
+                    barrier_free: false,
+                    seats: null
+                };
+
+                for (let i = 0; i < trip.waypoints.length; i++) {
+                    let waypoint = trip.waypoints[i];
+                    let waypoint2 = trip.waypoints[i + 1];
+
+                    if (waypoint2 == undefined) {
+                        break;
+                    }
+
+                    let shibiFrom: Place  = {
+                        location: {
+                            latitude: waypoint.place.latitude,
+                            longitude: waypoint.place.longitude
+                        },
+                        placeType: PlaceType.ADDRESS,
+                        name: waypoint.place.address,
+                        id: waypoint.place.address + "_" + waypoint.place.city + "_" + waypoint.place.country_code,
+                        information: [],
+                        barrier_free: false,
+                        available: true,
+                        hasTimeDetails: false,
+                        timeDetailsDeparture: null,
+                        timeDetailsArrival: null
+                    };
+
+                    let shibiTo: Place  = {
+                        location: {
+                            latitude: waypoint2.place.latitude,
+                            longitude: waypoint2.place.longitude
+                        },
+                        placeType: PlaceType.ADDRESS,
+                        name: waypoint2.place.address,
+                        id: waypoint2.place.address + "_" + waypoint2.place.city + "_" + waypoint2.place.country_code,
+                        information: [],
+                        barrier_free: false,
+                        available: true,
+                        hasTimeDetails: false,
+                        timeDetailsDeparture: null,
+                        timeDetailsArrival: null
+                    };
+
+                    let shibiDeparture: Departure = {
+                        time: new Date(waypoint.date_time),
+                        predictedTime: null,
+                        noPreciseTime: true
+                    };
+                    let shibiArrival: Departure = {
+                        time: new Date(waypoint2.date_time),
+                        predictedTime: null,
+                        noPreciseTime: true
+                    }
+
+                    shibiSubTrips.push({
+                        from: shibiFrom,
+                        to: shibiTo,
+                        stops: null,
+                        departure: shibiDeparture,
+                        arrival: shibiArrival,
+                        vehicle: shibiVehicle,
+                        information: null,
+                        source: "BlaBlaCar",
+                        url: undefined
+                    });
+                }
+
+                shibiTrips.push({
+                    from: shibiSubTrips[0].from,
+                    to: shibiSubTrips[shibiSubTrips.length - 1].to,
+                    departure: shibiSubTrips[0].departure,
+                    arrival: shibiSubTrips[shibiSubTrips.length - 1].arrival,
+                    routes: shibiSubTrips,
+                    tripType: TripType.SINGLE_MODAL,
+                    alternative: false,
+                    information: []
+                });
+            });
+
+            return {
+                context: blaBlaCarData.next_cursor,
                 serverResponseTime: Date.now(),
                 from: shibiTrips[0].from,
                 to: shibiTrips[shibiTrips.length - 1].to,

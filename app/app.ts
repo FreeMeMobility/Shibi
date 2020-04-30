@@ -153,6 +153,47 @@ expressServer.get("/shibi/mifaz.shibi", async function (req, res, next) {
     }
 });
 
+expressServer.get("/shibi/blablacar.shibi", async function (req, res, next) {
+    let apikey          = req.query['apikey'];
+    let latitudeFrom    = req.query['latFrom'];
+    let longitudeFrom   = req.query['lonFrom'];
+    let latitudeTo      = req.query['latTo'];
+    let longitudeTo     = req.query['lonTo'];
+    let fromCountry     = req.query['fromCountry'];
+    let toCountry       = req.query['toCountry'];
+    let locale          = req.query['locale'];
+    let date            = req.query['date'];
+
+    if (date == undefined) date = new Date(Date.now());
+
+    if (apikey == undefined) {
+        res.send("No APIKey provided.");
+    }
+
+    let data = await shibiSearch.shibiBlaBlaCarSearch(
+        latitudeFrom,
+        longitudeFrom,
+        latitudeTo,
+        longitudeTo,
+        fromCountry,
+        toCountry,
+        locale,
+        apikey,
+        new Date(date));
+
+    if (data == null) res.send("Request failed.");
+
+    else {
+        let finishedData: Shibi = shibiCreator.createShibiFromBlaBlaCar(data);
+
+        if (finishedData == null) res.send("Shibi parsing failed.");
+
+        else {
+            res.send(finishedData);
+        }
+    }
+});
+
 expressServer.get("/shibi/ride2go.shibi", async function (req, res, next) {
     let latitudeFrom    = req.query['latFrom'];
     let longitudeFrom   = req.query['lonFrom'];
