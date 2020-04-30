@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  shibi:
+    image: pdesire/shibi
+    build: .
+    ports:
+      - "8174:8174"
