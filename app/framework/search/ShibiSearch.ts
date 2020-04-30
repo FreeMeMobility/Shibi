@@ -1,4 +1,15 @@
 import axios from 'axios'
+import {
+    PageTripDto,
+    Search,
+    SearchTripTypesEnum,
+    SearchTransportTypesEnum,
+    SearchAnimalsEnum,
+    SearchBaggageEnum,
+    SearchGenderEnum,
+    SearchSmokingEnum,
+    TripsApi
+} from 'r2g-ts-sdk/api';
 import {TPTSearch} from "../../model/thepublictransport/search/TPTSearch";
 import {ThePublicTransport} from "../../model/thepublictransport/ThePublicTransport";
 import {Flixbus} from "../../model/flixbus/Flixbus";
@@ -84,5 +95,49 @@ export default class ShibiSearch {
             "&journeydate=" + DateTools.getMiFazDate(date));
 
         return request.data as MiFazData;
+    }
+
+    public async shibiRide2GoSearch(lat: number, lon: number, latTo: number, lonTo: number, date: Date): Promise<PageTripDto> {
+        let body: Search = {
+                 startPoint: {
+                    location: {
+                        latitude: lat,
+                        longitude: lon
+                    },
+                    radius: 20
+                 },
+                 endPoint: {
+                   location: {
+                       latitude: latTo,
+                       longitude: lonTo
+                   },
+                   radius: 20
+                 },
+                 departure: {
+                   time: date.toISOString(),
+                   toleranceInDays: 0
+                 },
+                 arrival: null,
+                 page: {
+                   firstIndex: 0,
+                   page: 0,
+                   pageSize: 100
+                 },
+                 // reoccurDays: null,
+                 availabilityStarts: date.toISOString(),
+                 availabilityEnds: null,
+                 tripTypes: [SearchTripTypesEnum.OFFER],
+                 transportTypes: [SearchTransportTypesEnum.CAR],
+                 animals: SearchAnimalsEnum.NO,
+                 baggage: SearchBaggageEnum.MEDIUM,
+                 gender: SearchGenderEnum.IRRELEVANT,
+                 smoking: SearchSmokingEnum.IRRELEVANT,
+            } as Search;
+
+        let api = new TripsApi();
+
+        let request = await api.search3(body);
+
+        return request.data as PageTripDto;
     }
 }

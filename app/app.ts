@@ -153,6 +153,16 @@ expressServer.get("/shibi/mifaz.shibi", async function (req, res, next) {
     }
 });
 
+expressServer.get("/shibi/ride2go.shibi", async function (req, res, next) {
+    let latitudeFrom    = req.query['latFrom'];
+    let longitudeFrom   = req.query['lonFrom'];
+    let latitudeTo      = req.query['latTo'];
+    let longitudeTo     = req.query['lonTo'];
+    let date            = req.query['date'];
+
+    res.status(501).send('501 Not Implemented Yet');
+});
+
 
 expressServer.listen(PORT, function() {
     console.log('Shibi listening on port ' + PORT.toString());

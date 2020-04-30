@@ -1246,6 +1246,13 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
+r2g-ts-sdk@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/r2g-ts-sdk/-/r2g-ts-sdk-1.0.2.tgz#ba1f5b1dbed213fa1330f11fcaa4014bf4866604"
+  integrity sha512-8iPj7TkTUess5ncXv6mZpiLOidgZFchj5S3/K0VRu514F9TAZWLo9U+oRPRowA7pk3pjpALZtGPX5b9QL61waA==
+  dependencies:
+    axios "^0.19.2"
+
 range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
