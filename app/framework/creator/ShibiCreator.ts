@@ -142,7 +142,7 @@ export default class ShibiCreator {
                             longitude: leg.departure.lonAsDouble
                         },
                         placeType: PlaceType.STATION,
-                        name: leg.departure.name + leg.departure.place != null ? ", " + leg.departure.place : "",
+                        name: leg.departure.name + (leg.departure.place != null ? ", " + leg.departure.place : ""),
                         id: leg.departure.id,
                         information: [],
                         barrier_free: true,
@@ -157,7 +157,7 @@ export default class ShibiCreator {
                             longitude: leg.arrival.lonAsDouble
                         },
                         placeType: PlaceType.STATION,
-                        name: leg.arrival.name + leg.arrival.place != null ? ", " + leg.arrival.place : "",
+                        name: leg.arrival.name + (leg.arrival.place != null ? ", " + leg.arrival.place : ""),
                         id: leg.arrival.id,
                         information: [],
                         barrier_free: true,
@@ -186,7 +186,7 @@ export default class ShibiCreator {
                                     longitude: stop.location.lonAsDouble
                                 },
                                 placeType: PlaceType.STATION,
-                                name: stop.location.name + stop.location.place != null ? ", " + stop.location.place : "",
+                                name: stop.location.name + (stop.location.place != null ? ", " + stop.location.place : ""),
                                 id: stop.location.id,
                                 information: [],
                                 barrier_free: true,
