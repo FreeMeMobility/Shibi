@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:13
 
 ENV PORT="8174"
 
