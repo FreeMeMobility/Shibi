@@ -2,11 +2,11 @@ import {Style} from "./Style";
 
 export interface Line {
     id:      string;
-    network: null;
+    network: string;
     product: string;
     label:   string;
     name:    string;
     style:   Style;
-    attrs:   null;
-    message: null;
+    attrs:   string;
+    message: string;
 }

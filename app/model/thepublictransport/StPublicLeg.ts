@@ -10,17 +10,17 @@ export interface StPublicLeg {
     departureStop:              Stop;
     arrivalStop:                Stop;
     intermediateStops:          Stop[];
-    message:                    null;
+    message:                    string;
     departureTimePredicted:     boolean;
     departureTime:              number;
     arrivalTime:                number;
-    departurePosition:          null;
+    departurePosition:          string;
     departurePositionPredicted: boolean;
     arrivalTimePredicted:       boolean;
-    arrivalPosition:            null;
+    arrivalPosition:            string;
     arrivalPositionPredicted:   boolean;
-    departureDelay:             null;
-    arrivalDelay:               null;
+    departureDelay:             number | null;
+    arrivalDelay:               number | null;
     maxTime:                    number;
     minTime:                    number;
 }

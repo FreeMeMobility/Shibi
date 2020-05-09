@@ -212,6 +212,8 @@ export default class ShibiCreator {
                         stops: shibiStops,
                         departure: shibiDeparture,
                         arrival: shibiArrival,
+                        fromTrack: leg.departurePosition != null ? leg.departurePosition.name : null,
+                        toTrack: leg.arrivalPosition != null ? leg.arrivalPosition.name : null,
                         vehicle: shibiVehicle,
                         information: leg.message,
                         source: source,

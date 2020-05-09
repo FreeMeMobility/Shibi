@@ -1,6 +1,7 @@
 import {From} from "./From";
 import {Line} from "./Line";
 import {Stop} from "./Stop";
+import {Position} from "./Position";
 
 export interface Leg {
     departure:                   From;
@@ -14,10 +15,10 @@ export interface Leg {
     departureTimePredicted?:     boolean;
     departureTime:               number;
     arrivalTime:                 number;
-    departurePosition?:          null;
+    departurePosition?:          Position | null;
     departurePositionPredicted?: boolean;
     arrivalTimePredicted?:       boolean;
-    arrivalPosition?:            null;
+    arrivalPosition?:            Position | null;
     arrivalPositionPredicted?:   boolean;
     departureDelay?:             number;
     arrivalDelay?:               number;

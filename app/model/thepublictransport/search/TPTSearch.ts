@@ -8,7 +8,7 @@ export interface Header {
     network:       string;
     serverProduct: string;
     serverVersion: string;
-    serverName:    null;
+    serverName:    string;
     serverTime:    number;
     context:       null;
 }
