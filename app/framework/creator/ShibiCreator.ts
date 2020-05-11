@@ -125,9 +125,9 @@ export default class ShibiCreator {
                 let shibiSubTrips: SubTrip[] = [];
                 trip.legs.forEach(function (leg) {
                     let shibiVehicle: Vehicle = {
-                        operator: leg.line?.product + ", " + leg.line?.id,
+                        operator: source,
                         id: leg.line?.id,
-                        name: leg.line?.name,
+                        name: leg.line?.label != null ? leg.line?.label : leg.line?.name,
                         vehicleType: ShibiCreator.getVehicleType(leg.line?.product),
                         climateFootprint: ShibiCreator.getVehicleFootprint(leg.line?.product),
                         speed: ShibiCreator.getVehicleSpeed(leg.line?.product),
