@@ -257,7 +257,7 @@ export default class ShibiCreator {
                 let shibiVehicle: Vehicle = {
                     operator: entry.username,
                     id: entry.id,
-                    name: "MiFaz Trip",
+                    name: "MiFaz Trip" + (entry.username != null ? " - " + entry.username : ""),
                     vehicleType: VehicleType.RIDESHARING,
                     climateFootprint: VehicleClimateFootprint.MEDIUM,
                     speed: VehicleSpeed.FAST,
@@ -336,7 +336,7 @@ export default class ShibiCreator {
                     arrival: shibiArrival,
                     vehicle: shibiVehicle,
                     information: null,
-                    source: "MiFaz",
+                    source: "MiFaz" + (entry.username != null ? " - " + entry.username : ""),
                     url: entry.url
                 });
 
