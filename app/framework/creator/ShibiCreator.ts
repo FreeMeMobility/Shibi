@@ -299,16 +299,34 @@ export default class ShibiCreator {
                     timeDetailsDeparture: null,
                     timeDetailsArrival: null
                 };
-                let shibiDeparture: Departure = {
-                    time: DateTools.miFazToDate(miFazDate, entry.starttimebegin),
-                    predictedTime: DateTools.miFazToDate(miFazDate, entry.starttimebegin),
-                    noPreciseTime: false
-                };
-                let shibiArrival: Departure = {
-                    time: DateTools.miFazToDate(miFazDate, entry.starttimeend),
-                    predictedTime: DateTools.miFazToDate(miFazDate, entry.starttimeend),
-                    noPreciseTime: true
-                };
+
+                let shibiDeparture: Departure;
+                let shibiArrival: Departure;
+
+                if (entry.starttimebegin == "00:00" && entry.starttimeend == "23:59") {
+                    shibiDeparture = {
+                        time: null,
+                        predictedTime: null,
+                        noPreciseTime: false
+                    };
+                    shibiArrival = {
+                        time: null,
+                        predictedTime: null,
+                        noPreciseTime: false
+                    };
+                } else {
+                    shibiDeparture = {
+                        time: DateTools.miFazToDate(miFazDate, entry.starttimebegin),
+                        predictedTime: DateTools.miFazToDate(miFazDate, entry.starttimebegin),
+                        noPreciseTime: false
+                    };
+                    shibiArrival = {
+                        time: DateTools.miFazToDate(miFazDate, entry.starttimeend),
+                        predictedTime: DateTools.miFazToDate(miFazDate, entry.starttimeend),
+                        noPreciseTime: true
+                    };
+                }
+
 
                 shibiSubTrips.push({
                     from: shibiFrom,
