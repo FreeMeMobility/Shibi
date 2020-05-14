@@ -8,7 +8,7 @@ export default class DateTools {
             "T" +
             date.getHours().toString().padStart(2, '0') +
             ":" +
-            date.getSeconds().toString().padStart(2, '0') +
+            date.getMinutes().toString().padStart(2, '0') +
             ":" +
             "00";
     }
