@@ -139,18 +139,6 @@ These data are coming from the SNCB HAFAS endpoint.
 
 These data are coming from the MiFaz API.
 
-## ride2go (Ridesharing)
-
-![logo](https://avatars1.githubusercontent.com/u/63668570?s=200&v=4)
-
-**Endpoint:**
-
-``ride2go.shibi``
-
-**Description:**
-
-These data are coming from the ride2go API called r2gapi.
-
 ## BlaBlaCar (Ridesharing)
 
 ![logo](https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/BlaBlaCar_logo.svg/500px-BlaBlaCar_logo.svg.png)
