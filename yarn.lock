@@ -948,9 +948,9 @@ load-json-file@^1.0.0:
     strip-bom "^2.0.0"
 
 lodash@^4.17.14, lodash@^4.17.15:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 loud-rejection@^1.0.0:
   version "1.6.0"
@@ -1245,13 +1245,6 @@ qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
-
-r2g-ts-sdk@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/r2g-ts-sdk/-/r2g-ts-sdk-1.0.2.tgz#ba1f5b1dbed213fa1330f11fcaa4014bf4866604"
-  integrity sha512-8iPj7TkTUess5ncXv6mZpiLOidgZFchj5S3/K0VRu514F9TAZWLo9U+oRPRowA7pk3pjpALZtGPX5b9QL61waA==
-  dependencies:
-    axios "^0.19.2"
 
 range-parser@~1.2.1:
   version "1.2.1"
