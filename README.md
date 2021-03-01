@@ -1,3 +1,5 @@
+# The new Service is available [here](https://github.com/ZweiDev/Shibi)
+
 # Shibi
 
 ![logo](https://avatars3.githubusercontent.com/u/60640601?s=200&v=4)
